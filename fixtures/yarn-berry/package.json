@@ -1,0 +1,13 @@
+{
+  "name": "fixture-app",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "lodash": "4.17.15",
+    "minimist": "1.2.8",
+    "mkdirp": "0.5.1"
+  },
+  "devDependencies": {
+    "ms": "2.0.0"
+  }
+}

@@ -1,0 +1,5 @@
+node_modules/
+dist/
+# Generated audit reports
+dependency-audit*.html
+.DS_Store
