@@ -3,3 +3,6 @@ dist/
 # Generated audit reports
 dependency-audit*.html
 .DS_Store
+
+# Vercel project link
+.vercel

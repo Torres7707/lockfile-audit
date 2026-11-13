@@ -12,9 +12,21 @@ npm lockfile v1 和 yarn classic 没有记录哪些是直接依赖，需要同�
 
 ```sh
 npm install
-npm run web:dev     # 开发服务器
-npm run web:build   # 构建到 web/dist，是纯静态文件，可放在任何静态托管上
+npm run web:dev     # 开发服务器，http://localhost:5173
+npm run web:build   # 构建到 web/dist，是纯静态文件
+npm run web:preview # 本地预览构建结果
 ```
+
+### 部署到 Vercel
+
+仓库根目录的 `vercel.json` 已经配置好构建命令和输出目录。Vercel 上的项目设置保持默认值即可，**Root Directory 必须留在仓库根目录**，不能设成 `web`。网页端直接引用根目录下的 `parse-core.mjs`、`audit-core.mjs` 等文件，单独构建 `web/` 会找不到它们。
+
+- 通过 Git 导入：在 Vercel 里 Add New → Project，选择这个仓库，直接 Deploy。之后每次推送到 `main` 都会自动部署。
+- 或用命令行：`npx vercel` 首次会引导登录和建立项目关联，之后 `npx vercel --prod` 部署到正式域名。
+
+部署产物只包含 `web/dist` 里的静态文件。分析在用户浏览器里完成，服务器不接收锁文件内容。
+
+`vercel.json` 没有设置响应头。内容安全策略（CSP）写在构建出的 HTML 里，只允许连接 `api.osv.dev`。
 
 ## 命令行
 
