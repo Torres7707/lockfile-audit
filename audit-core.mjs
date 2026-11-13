@@ -7,7 +7,7 @@ import { severityRank, topSeverity } from "./report.mjs";
 const ADVISORY_CONCURRENCY = 6;
 
 /**
- * @typedef {{ stage: "query" } | { stage: "advisories", done: number, total: number }} AuditProgress
+ * @typedef {{ stage: "query", total: number } | { stage: "advisories", done: number, total: number }} AuditProgress
  */
 
 /**
@@ -19,7 +19,7 @@ export async function auditGraph(graph, opts = {}) {
   const onProgress = opts.onProgress ?? (() => {});
 
   const packages = [...graph.nodes.values()].map((n) => ({ name: n.name, version: n.version }));
-  onProgress({ stage: "query" });
+  onProgress({ stage: "query", total: packages.length });
   const vulnIds = await queryVulnIds(packages, fetchImpl);
 
   const advisoryIds = [...new Set([...vulnIds.values()].flat())];

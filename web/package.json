@@ -1,0 +1,25 @@
+{
+  "name": "lockfile-audit-web",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "description": "Browser UI for lockfile-audit: drop a lockfile, get the HTML report",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -p . && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -p .",
+    "test": "node --test \"src/**/*.test.ts\""
+  },
+  "dependencies": {
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.1.2",
+    "typescript": "6.0.3",
+    "vite": "8.3.5"
+  }
+}

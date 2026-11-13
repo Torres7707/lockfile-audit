@@ -5,9 +5,14 @@
   "version": "0.1.0",
   "description": "Find known-vulnerable dependencies (direct and transitive) in npm, pnpm, and yarn lockfiles",
   "scripts": {
-    "test": "node --test",
-    "audit": "node audit.mjs"
+    "test": "node --test \"*.test.mjs\"",
+    "audit": "node audit.mjs",
+    "web:dev": "npm run dev --workspace web",
+    "web:build": "npm run build --workspace web"
   },
+  "workspaces": [
+    "web"
+  ],
   "dependencies": {
     "@yarnpkg/parsers": "3.1.0",
     "semver": "7.8.6",

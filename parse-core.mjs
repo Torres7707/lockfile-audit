@@ -3,7 +3,8 @@
 // depends on, after the lockfile's own resolution (nested node_modules, peer suffixes, aliases).
 // No file or Node.js access here, so the browser app can use it too. parse.mjs adds file reading.
 import YAML from "yaml";
-import yarnParsers from "@yarnpkg/parsers";
+// Named import: the package is CommonJS with `__esModule` set, so bundlers give no default export.
+import { parseSyml } from "@yarnpkg/parsers";
 
 /**
  * @typedef {{ name: string, version: string, children: Set<string> }} GraphNode
@@ -30,6 +31,18 @@ export function parseLockfileText(fileName, text, pkgJson) {
 }
 
 const isYarnBerry = (text) => text.includes("__metadata:");
+
+/**
+ * The graph `format` parseLockfileText will report for this lockfile, without parsing it.
+ * @param {string} fileName one of LOCKFILE_NAMES
+ * @param {string} text
+ * @returns {"npm" | "pnpm" | "yarn-classic" | "yarn-berry"}
+ */
+export function lockfileFormat(fileName, text) {
+  if (fileName === "yarn.lock") return isYarnBerry(text) ? "yarn-berry" : "yarn-classic";
+  if (fileName === "pnpm-lock.yaml") return "pnpm";
+  return "npm";
+}
 
 /**
  * Guesses the lockfile type from its contents, for files that were renamed (for example a
@@ -265,7 +278,7 @@ function parseYarnClassic(text, pkgJson) {
   if (!pkgJson) {
     throw new Error("yarn classic lockfiles do not record direct dependencies. Put package.json next to yarn.lock.");
   }
-  const { graph, resolve } = buildYarnGraph("yarn-classic", yarnParsers.parseSyml(text));
+  const { graph, resolve } = buildYarnGraph("yarn-classic", parseSyml(text));
   const kinds = kindMap(manifestSections(pkgJson));
   graph.roots = rootsFor(kinds).map((root) => {
     const range = pkgJson.dependencies?.[root.name] ?? pkgJson.devDependencies?.[root.name] ?? pkgJson.optionalDependencies?.[root.name];
@@ -275,7 +288,7 @@ function parseYarnClassic(text, pkgJson) {
 }
 
 function parseYarnBerry(text, pkgJson) {
-  const lock = yarnParsers.parseSyml(text);
+  const lock = parseSyml(text);
   const { graph, resolve, rootEntry } = buildYarnGraph("yarn-berry", lock);
   const kinds = kindMap(manifestSections(pkgJson));
   const names = Object.keys(rootEntry?.dependencies ?? {});
