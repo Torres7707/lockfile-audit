@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>fixture-app: 依赖漏洞报告</title>
+<style>
+:root { color-scheme: light dark; --bg: #f6f5f2; --fg: #1d1d1b; --muted: #6b6a66; --card: #ffffff;
+  --line: #deddd8; --code: #efeee9; --crit: #a4161a; --high: #c4520f; --mod: #8a6d00; --low: #3d6b3d; --unk: #6b6a66; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg: #161615; --fg: #ecebe6; --muted: #a09e97; --card: #1f1f1d;
+    --line: #34332f; --code: #2a2a27; --crit: #ff8a8c; --high: #ffb27a; --mod: #e6cc62; --low: #9ad19a; --unk: #a09e97; }
+}
+:root[data-theme="dark"] { --bg: #161615; --fg: #ecebe6; --muted: #a09e97; --card: #1f1f1d;
+  --line: #34332f; --code: #2a2a27; --crit: #ff8a8c; --high: #ffb27a; --mod: #e6cc62; --low: #9ad19a; --unk: #a09e97; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 960px; margin: 0 auto; padding: 32px 16px 64px; }
+h1 { font-size: 24px; margin: 0 0 4px; }
+h2 { font-size: 17px; margin: 0; }
+.meta { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.meta code { word-break: break-all; }
+.summary { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
+.stat { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 12px 16px; min-width: 150px; }
+.stat b { display: block; font-size: 22px; }
+.stat span { color: var(--muted); font-size: 13px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+.card-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.badge { font-size: 12px; font-weight: 600; border-radius: 4px; padding: 2px 8px; border: 1px solid currentColor; }
+.sev-CRITICAL { color: var(--crit); } .sev-HIGH { color: var(--high); } .sev-MODERATE, .sev-MEDIUM { color: var(--mod); }
+.sev-LOW { color: var(--low); } .sev-UNKNOWN { color: var(--unk); }
+.where { color: var(--muted); font-size: 13px; margin: 8px 0; }
+code, pre { font: 13px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace; }
+code { background: var(--code); padding: 1px 5px; border-radius: 4px; }
+pre { background: var(--code); padding: 12px; border-radius: 6px; overflow-x: auto; margin: 8px 0 0; }
+table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 14px; }
+th, td { text-align: left; padding: 6px 8px; border-top: 1px solid var(--line); vertical-align: top; }
+th { color: var(--muted); font-weight: 500; font-size: 12px; }
+td.id { white-space: nowrap; }
+a { color: inherit; }
+.fix { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 12px; }
+.fix ol { margin: 8px 0 0; padding-left: 20px; }
+.empty { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 24px; }
+.caveat { color: var(--muted); font-size: 13px; margin-top: 32px; }
+@media (max-width: 600px) { main { padding: 24px 16px 48px; } th:nth-child(1), td:nth-child(1) { display: none; } }
+</style>
+</head>
+<body>
+<main>
+<h1>fixture-app: 依赖漏洞报告</h1>
+<div class="meta">
+  生成于 2026-01-01T00:00:00.000Z<br>
+  锁文件 <code>pnpm-lock.yaml</code>（pnpm）
+</div>
+<section class="summary">
+  <div class="stat"><b>3</b><span>有漏洞的包版本</span></div>
+  <div class="stat"><b>4</b><span>不重复的漏洞编号</span></div>
+  <div class="stat"><b>5</b><span>检查的包版本</span></div>
+  <div class="stat"><b>CRITICAL</b><span>最高严重等级</span></div>
+</section>
+<section class="card">
+  <div class="card-head">
+    <h2><code>minimist@0.0.8</code></h2>
+    <span class="badge sev-CRITICAL">CRITICAL</span>
+  </div>
+  <div class="where">间接依赖，引入路径：<code>mkdirp@0.5.1 -&gt; minimist@0.0.8</code></div>
+  <div class="where">被这些包依赖：<code>mkdirp@0.5.1</code></div>
+  <table>
+    <thead><tr><th>严重程度</th><th>编号</th><th>说明</th></tr></thead>
+    <tbody>
+<tr>
+        <td class="sev-CRITICAL">CRITICAL</td>
+        <td class="id"><a href="https://osv.dev/vulnerability/GHSA-fake-mini">GHSA-fake-mini</a></td>
+        <td>Prototype pollution in minimist</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="fix">
+    <div><b>修复建议</b></div>
+    <div>minimist 是间接依赖（经由 mkdirp@0.5.1）。用覆盖配置把它强制升到 0.2.4 或以上。</div>
+    <ol><li><code>在项目的 package.json 中加入下面的配置</code></li><li><code>pnpm install</code></li></ol>
+    <pre><code>{
+  &quot;pnpm&quot;: {
+    &quot;overrides&quot;: {
+      &quot;minimist&quot;: &quot;&gt;=0.2.4&quot;
+    }
+  }
+}</code></pre>
+  </div>
+</section>
+<section class="card">
+  <div class="card-head">
+    <h2><code>lodash@4.17.15</code></h2>
+    <span class="badge sev-HIGH">HIGH</span>
+  </div>
+  <div class="where">直接依赖</div>
+  
+  <table>
+    <thead><tr><th>严重程度</th><th>编号</th><th>说明</th></tr></thead>
+    <tbody>
+<tr>
+        <td class="sev-HIGH">HIGH</td>
+        <td class="id"><a href="https://osv.dev/vulnerability/GHSA-fake-lod1">GHSA-fake-lod1</a></td>
+        <td>Command injection in lodash &lt;script&gt;</td>
+      </tr>
+<tr>
+        <td class="sev-MODERATE">MODERATE</td>
+        <td class="id"><a href="https://osv.dev/vulnerability/GHSA-fake-lod2">GHSA-fake-lod2</a></td>
+        <td>Prototype pollution in lodash</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="fix">
+    <div><b>修复建议</b></div>
+    <div>直接依赖 lodash 需要升级到 4.17.21 或以上。</div>
+    <ol><li><code>pnpm add lodash@4.17.21</code></li><li><code>pnpm install</code></li></ol>
+    
+  </div>
+</section>
+<section class="card">
+  <div class="card-head">
+    <h2><code>ms@2.0.0</code></h2>
+    <span class="badge sev-UNKNOWN">UNKNOWN</span>
+  </div>
+  <div class="where">直接依赖</div>
+  
+  <table>
+    <thead><tr><th>严重程度</th><th>编号</th><th>说明</th></tr></thead>
+    <tbody>
+<tr>
+        <td class="sev-UNKNOWN">UNKNOWN</td>
+        <td class="id"><a href="https://osv.dev/vulnerability/GHSA-fake-ms">GHSA-fake-ms</a></td>
+        <td>Regular expression denial of service in ms</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="fix">
+    <div><b>修复建议</b></div>
+    <div>OSV 没有给出修复版本。需要确认是否有官方修复、换一个替代包，或者移除这个依赖。</div>
+    
+    
+  </div>
+</section>
+<p class="caveat">数据来自 OSV（osv.dev）。它只收录已公开的漏洞。没有命中不代表没有风险。修复建议基于 OSV 给出的修复版本，修改后请重新运行检查确认。</p>
+</main>
+</body>
+</html>
