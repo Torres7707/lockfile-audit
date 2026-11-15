@@ -1,4 +1,5 @@
 import type { Progress as ProgressState } from "../lib/runAudit.ts";
+import { CheckIcon } from "./Icons.tsx";
 
 const ORDER: ProgressState["stage"][] = ["parse", "query", "advisories", "render"];
 
@@ -22,20 +23,29 @@ interface Props {
   seen: Partial<Record<string, ProgressState>>;
 }
 
+/** Stages drawn as a chain of linked nodes, like a dependency path being resolved. */
 export function Progress({ progress, seen }: Props) {
   const current = ORDER.indexOf(progress.stage);
   return (
-    <ol className="steps" aria-live="polite">
-      {ORDER.map((stage, i) => {
-        const state = i < current ? "done" : i === current ? "active" : "pending";
-        return (
-          <li key={stage} className={`step is-${state}`}>
-            <span className="step-mark" aria-hidden="true" />
-            <span>{label(stage, progress, seen)}</span>
-            {state === "done" && <span className="visually-hidden">（已完成）</span>}
-          </li>
-        );
-      })}
-    </ol>
+    <section className="run" aria-label="分析进度">
+      <p className="run-title">正在审计依赖</p>
+      <ol className="steps" aria-live="polite">
+        {ORDER.map((stage, i) => {
+          const state = i < current ? "done" : i === current ? "active" : "pending";
+          return (
+            <li key={stage} className={`step is-${state}`}>
+              <span className="step-mark" aria-hidden="true">
+                {state === "done" && <CheckIcon size={11} />}
+              </span>
+              <span className="step-index" aria-hidden="true">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <span className="step-label">{label(stage, progress, seen)}</span>
+              {state === "done" && <span className="visually-hidden">（已完成）</span>}
+            </li>
+          );
+        })}
+      </ol>
+    </section>
   );
 }
