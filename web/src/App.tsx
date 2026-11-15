@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { DropZone } from "./components/DropZone.tsx";
+import { Hero } from "./components/Hero.tsx";
 import { FileList } from "./components/FileList.tsx";
 import { Progress } from "./components/Progress.tsx";
 import { ReportView } from "./components/ReportView.tsx";
@@ -94,13 +95,7 @@ export function App() {
 
   return (
     <main>
-      <header>
-        <h1>锁文件漏洞检查</h1>
-        <p className="lead">
-          拖入项目的锁文件，检查直接和间接依赖里的已知漏洞，查看引入路径和修复建议，并下载 HTML 报告。
-        </p>
-        <p className="privacy">文件只在你的浏览器里解析，不会上传。只有包名和版本号会发送给 osv.dev 查询。</p>
-      </header>
+      <Hero compact={phase.name === "done" || running} />
 
       {phase.name === "done" ? (
         <ReportView
@@ -138,8 +133,10 @@ export function App() {
       )}
 
       <footer className="caveat">
-        数据来自 OSV（osv.dev），只收录已公开的漏洞。没有命中不代表没有风险。命令行版本：
-        <code>node audit.mjs &lt;lockfile&gt;</code>
+        <span>数据来自 OSV（osv.dev），只收录已公开的漏洞。没有命中不代表没有风险。</span>
+        <span>
+          命令行版本：<code>node audit.mjs &lt;lockfile&gt;</code>
+        </span>
       </footer>
     </main>
   );
